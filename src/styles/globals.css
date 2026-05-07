@@ -1,0 +1,254 @@
+@import "tailwindcss";
+
+/*
+ * AgriDiffuse — Family design tokens
+ * Pixar storyboard on cream paper. Warm canvas, illustrated identity, near-black pill CTA.
+ */
+
+@theme {
+  /* ── Surfaces & neutrals ───────────────────────────────────── */
+  --color-warm-canvas: #fbfaf9;
+  --color-stone-surface: #f2f0ed;
+  --color-parchment-card: #f8f7f4;
+  --color-graphite: #474645;
+  --color-charcoal: #343433;
+  --color-midnight: #121212;
+  --color-obsidian: #000000;
+  --color-ash: #848281;
+  --color-fog: #c6c6c6;
+  --color-smoke: #a7a7a7;
+  --color-pepper: #282624;
+
+  /* ── Brand accents ─────────────────────────────────────────── */
+  --color-ember: #ff3e00;
+  --color-meadow: #00ca48;
+  --color-sky: #0090ff;
+  --color-sunburst: #ffbb26;
+  --color-amber-deep: #d48f00;
+  --color-ocean: #0086fc;
+  --color-ice: #64c6ff;
+  --color-spearmint: #00c978;
+  --color-flamingo: #ff58ae;
+  --color-violet: #9f4fff;
+  --color-coral: #ff2b3a;
+  --color-valid: #00c454;
+
+  /* ── Typography ────────────────────────────────────────────── */
+  --font-family: "Fraunces", "Family", ui-serif, Georgia, serif;
+  --font-inter: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+
+  --text-caption: 12px;
+  --text-body: 15px;
+  --text-heading-sm: 19px;
+  --text-heading: 23px;
+  --text-heading-lg: 44px;
+  --text-display: 68px;
+
+  /* ── Spacing ───────────────────────────────────────────────── */
+  --spacing: 4px;
+
+  /* ── Radii ─────────────────────────────────────────────────── */
+  --radius-tags: 6px;
+  --radius-cards: 10px;
+  --radius-inputs: 10px;
+  --radius-cards-large: 24px;
+  --radius-buttons: 32px;
+  --radius-illustrations: 72px;
+  --radius-icons: 40px;
+
+  /* ── Shadows ───────────────────────────────────────────────── */
+  --shadow-subtle: 0 0 0 1px #f2f0ed inset;
+  --shadow-subtle-outline: 0 0 0 1px rgba(0, 0, 0, 0.04);
+  --shadow-elevated:
+    rgba(0, 0, 0, 0.04) 0 1px 6px 0, rgba(0, 0, 0, 0.05) 0 0 24px 0;
+  --shadow-product: rgba(0, 0, 0, 0.15) 0 0 24px 0;
+
+  /* ── Motion ────────────────────────────────────────────────── */
+  --ease-spring: cubic-bezier(0.19, 1, 0.22, 1);
+  --duration-fast: 0.15s;
+  --duration-base: 0.2s;
+  --duration-slow: 0.4s;
+  --duration-bounce: 1s;
+}
+
+/* ── Base reset & body ──────────────────────────────────────────── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    background: var(--color-warm-canvas);
+    color: var(--color-graphite);
+    font-family: var(--font-inter);
+    font-size: var(--text-body);
+    line-height: 1.47;
+    letter-spacing: -0.2px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: var(--color-ember);
+    color: #fff;
+  }
+
+  /* Display headings — Family/Fraunces */
+  .font-display {
+    font-family: var(--font-family);
+    font-weight: 500;
+    letter-spacing: -2.11px;
+    line-height: 1.09;
+  }
+
+  .font-heading-lg {
+    font-family: var(--font-inter);
+    font-weight: 600;
+    letter-spacing: -1.14px;
+    line-height: 1.09;
+  }
+}
+
+/* ── Family blob character keyframes ───────────────────────────── */
+@layer utilities {
+  .anim-bob {
+    animation: bob 3s var(--ease-spring) infinite;
+  }
+  .anim-bob-slow {
+    animation: bob 5s var(--ease-spring) infinite;
+  }
+  .anim-spin-slow {
+    animation: spin 12s linear infinite;
+  }
+  .anim-pulse-soft {
+    animation: pulse-soft 2.4s ease-in-out infinite;
+  }
+
+  @keyframes bob {
+    0%,
+    100% {
+      transform: translateY(0) rotate(-2deg);
+    }
+    50% {
+      transform: translateY(-8px) rotate(2deg);
+    }
+  }
+  @keyframes pulse-soft {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.85;
+      transform: scale(1.04);
+    }
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+/* ── Card primitive — the inset stone border is the brand ─────── */
+.card-inset {
+  background: #fff;
+  border-radius: var(--radius-cards);
+  box-shadow: var(--shadow-subtle);
+}
+
+.card-recessed {
+  background: var(--color-parchment-card);
+  border-radius: var(--radius-cards);
+}
+
+.card-product {
+  background: var(--color-obsidian);
+  border-radius: var(--radius-cards-large);
+  box-shadow: var(--shadow-product);
+  color: #fff;
+}
+
+/* ── Layered focus ring matching the warm tone ──────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-ember);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── React Flow theming hook ────────────────────────────────────── */
+.react-flow {
+  --rf-canvas-bg: var(--color-warm-canvas);
+}
+.react-flow__renderer {
+  background: var(--rf-canvas-bg);
+}
+.react-flow__edge-path {
+  transition: stroke var(--duration-base) ease;
+}
+.react-flow__attribution {
+  display: none !important;
+}
+
+/* Connection handles
+ *
+ * In View / Sim modes the handles stay subtle so they don't visually
+ * compete with the illustrated nodes. In Build mode (`.build-mode` on the
+ * canvas wrapper) we make them obvious — bright dots with an INVISIBLE
+ * larger hit zone via a `::before` pseudo so users don't have to land
+ * pixel-perfect on a small dot to start dragging. */
+.react-flow__handle {
+  width: 8px;
+  height: 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  transition:
+    background var(--duration-fast) ease,
+    border-color var(--duration-fast) ease,
+    transform var(--duration-base) ease;
+}
+
+/* Build-mode handle: 22px ember dot. Keeps the click target large enough
+ * to grab without aim precision, since handles render smaller-than-CSS at
+ * fitView zoom. The transparent ::before extends the hit zone another 12px
+ * in every direction. */
+.build-mode .react-flow__handle {
+  background: var(--color-ember);
+  border: 2px solid #fff;
+  width: 22px;
+  height: 22px;
+  box-shadow: 0 0 0 1px rgba(255, 62, 0, 0.5);
+  z-index: 10;
+  cursor: crosshair;
+}
+
+.build-mode .react-flow__handle::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  cursor: crosshair;
+}
+
+.build-mode .react-flow__handle:hover {
+  transform: scale(1.3);
+  box-shadow: 0 0 0 6px rgba(255, 62, 0, 0.18);
+}
+
+/* React Flow adds these classes only while a connection drag is in flight. */
+.build-mode .react-flow__handle.connectingfrom {
+  background: var(--color-meadow);
+  box-shadow: 0 0 0 6px rgba(0, 202, 72, 0.25);
+  transform: scale(1.4);
+}
+.build-mode .react-flow__handle.valid {
+  background: var(--color-meadow);
+  box-shadow: 0 0 0 8px rgba(0, 202, 72, 0.3);
+  transform: scale(1.5);
+}
