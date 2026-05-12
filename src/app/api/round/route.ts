@@ -38,7 +38,52 @@ export async function POST() {
   });
 
   result.narrative = narrative;
-  await replaceSnapshot(nextSnapshot);
 
-  return NextResponse.json({ snapshot: nextSnapshot, result });
+  // Merge concurrent user edits before persisting. The engine started from a
+  // snapshot read at T0; between then and now, the user may have dragged in
+  // an edge or dropped a new node. nextSnapshot doesn't know about those,
+  // and a naive replaceSnapshot would erase them from the in-memory store
+  // (the Neo4j path uses MERGE so the edge survives in Aura but the client's
+  // copy of the snapshot still loses it). Refresh + take the union of new
+  // entities, engine's version wins for anything it also touched.
+  const refreshed = await getSnapshot();
+  const mergedSnapshot = mergeConcurrentEdits(snapshot, nextSnapshot, refreshed);
+
+  await replaceSnapshot(mergedSnapshot);
+  return NextResponse.json({ snapshot: mergedSnapshot, result });
+}
+
+/**
+ * Union of two snapshot derivations that diverged from a common ancestor:
+ *   - `initial` is what the engine read at T0
+ *   - `engineResult` is what the engine produced (a fork of `initial`)
+ *   - `latest` is what the store currently looks like (may have user edits)
+ *
+ * Strategy: start with engineResult, then add any node/edge from `latest`
+ * whose id didn't exist in `initial` AND isn't already in engineResult.
+ * Those are precisely the user-created entities that happened during the
+ * round; without this merge they vanish from the client's snapshot.
+ */
+function mergeConcurrentEdits(
+  initial: import("@/lib/graph/types").GraphSnapshot,
+  engineResult: import("@/lib/graph/types").GraphSnapshot,
+  latest: import("@/lib/graph/types").GraphSnapshot,
+): import("@/lib/graph/types").GraphSnapshot {
+  const initialNodeIds = new Set(initial.nodes.map((n) => n.id));
+  const initialEdgeIds = new Set(initial.edges.map((e) => e.id));
+  const engineNodeIds = new Set(engineResult.nodes.map((n) => n.id));
+  const engineEdgeIds = new Set(engineResult.edges.map((e) => e.id));
+
+  const concurrentNodes = latest.nodes.filter(
+    (n) => !initialNodeIds.has(n.id) && !engineNodeIds.has(n.id),
+  );
+  const concurrentEdges = latest.edges.filter(
+    (e) => !initialEdgeIds.has(e.id) && !engineEdgeIds.has(e.id),
+  );
+
+  return {
+    nodes: [...engineResult.nodes, ...concurrentNodes],
+    edges: [...engineResult.edges, ...concurrentEdges],
+    round: engineResult.round,
+  };
 }
