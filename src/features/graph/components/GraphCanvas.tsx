@@ -98,15 +98,16 @@ function Inner({ showFlowOverlay = false, buildMode = false, height = 640 }: Gra
     [buildMode, addNode, reactFlow],
   );
 
-  // ── Build mode: connect-by-drag ──────────────────────────────────
+  // Connect-by-drag works in any mode — connections aren't destructive, so
+  // gating them behind Build is unnecessary friction. The mode toolbar only
+  // controls the palette (add new nodes) and the round-event overlay.
   const onConnect = useCallback(
     (connection: Connection) => {
-      if (!buildMode) return;
       if (!connection.source || !connection.target) return;
       if (connection.source === connection.target) return;
       void addEdge(connection.source, connection.target);
     },
-    [buildMode, addEdge],
+    [addEdge],
   );
 
   if (error) {
@@ -188,13 +189,19 @@ function Inner({ showFlowOverlay = false, buildMode = false, height = 640 }: Gra
 function CanvasErrorToast() {
   const error = useGraphStore((s) => s.error);
   if (!error) return null;
+  // "Already exists" is a normal outcome of two adjacent farmers having a
+  // seeded KNOWS, not a hard error — soften its presentation so it doesn't
+  // look like the system is broken.
+  const isSoft = /already exists/i.test(error);
+  const dotClass = isSoft ? "bg-sunburst" : "bg-coral";
+  const borderClass = isSoft ? "border-sunburst/40" : "border-coral/30";
   return (
     <div className="absolute left-1/2 top-4 z-30 -translate-x-1/2">
       <div
-        className="card-inset rounded-buttons border-coral/30 flex items-center gap-2 border px-4 py-2"
+        className={`card-inset rounded-buttons flex items-center gap-2 border px-4 py-2 ${borderClass}`}
         style={{ boxShadow: "var(--shadow-elevated)" }}
       >
-        <span className="bg-coral inline-block h-2 w-2 rounded-full" />
+        <span className={`inline-block h-2 w-2 rounded-full ${dotClass}`} />
         <span
           className="text-charcoal text-[13px] font-medium"
           style={{ letterSpacing: "-0.17px" }}
