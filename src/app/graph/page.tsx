@@ -20,7 +20,7 @@ export default function GraphPage() {
             style={{ fontSize: "17px", letterSpacing: "-0.22px" }}
           >
             Three node types, four edge types. Click any node for properties, history, and a one-click
-            Featherless explainer.
+            Featherless explainer. Drag the orange dots between two nodes to connect them.
           </p>
         </div>
         <div className="flex gap-2">
@@ -33,7 +33,9 @@ export default function GraphPage() {
         </div>
       </header>
 
-      <GraphCanvas />
+      {/* buildMode enabled so the /graph page is also editable — drag the
+          palette tiles to add nodes, drag node handles to connect them. */}
+      <GraphCanvas buildMode />
     </div>
   );
 }
