@@ -3,7 +3,7 @@ import { getSnapshot, replaceSnapshot } from "@/lib/graph/store";
 import { runRound } from "@/lib/sim/engine";
 import { pay } from "@/lib/integrations/masumi";
 import { narrateRound } from "@/lib/integrations/featherless";
-import type { GraphNode } from "@/lib/graph/types";
+import type { GraphNode, GraphSnapshot } from "@/lib/graph/types";
 
 export const dynamic = "force-dynamic";
 
@@ -65,10 +65,10 @@ export async function POST() {
  * round; without this merge they vanish from the client's snapshot.
  */
 function mergeConcurrentEdits(
-  initial: import("@/lib/graph/types").GraphSnapshot,
-  engineResult: import("@/lib/graph/types").GraphSnapshot,
-  latest: import("@/lib/graph/types").GraphSnapshot,
-): import("@/lib/graph/types").GraphSnapshot {
+  initial: GraphSnapshot,
+  engineResult: GraphSnapshot,
+  latest: GraphSnapshot,
+): GraphSnapshot {
   const initialNodeIds = new Set(initial.nodes.map((n) => n.id));
   const initialEdgeIds = new Set(initial.edges.map((e) => e.id));
   const engineNodeIds = new Set(engineResult.nodes.map((n) => n.id));

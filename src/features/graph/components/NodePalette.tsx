@@ -60,7 +60,7 @@ export function NodePalette() {
         className="text-ash mt-3 px-1 text-[11px] leading-snug"
         style={{ letterSpacing: "-0.12px" }}
       >
-        Then drag from one node's edge to another to connect them. Edge type is
+        Then drag from one node&apos;s edge to another to connect them. Edge type is
         inferred from the labels.
       </p>
     </div>
