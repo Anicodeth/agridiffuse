@@ -42,8 +42,8 @@ export function SimulatorPanel() {
   const deferredResult = useDeferredValue(activeResult);
 
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_380px]">
-      <div className="space-y-3">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
+      <div className="min-w-0 space-y-3">
         <div className="flex items-center justify-between gap-3">
           <SimToolbar />
           <span className="text-ash text-[12px]" style={{ letterSpacing: "-0.14px" }}>
@@ -62,7 +62,7 @@ export function SimulatorPanel() {
         <EventLog result={deferredResult} nodes={snapshot?.nodes ?? []} />
       </div>
 
-      <aside className="space-y-6">
+      <aside className="min-w-0 space-y-6">
         <SimControls />
 
         <NarrativeBox

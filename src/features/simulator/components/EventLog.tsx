@@ -64,8 +64,11 @@ export function EventLog({ result, nodes }: EventLogProps) {
             >
               {event.kind === "adopted" ? (
                 <>
-                  <Badge tone="meadow">adopt</Badge>
-                  <span className="text-graphite" style={{ letterSpacing: "-0.17px" }}>
+                  <Badge tone="meadow" className="shrink-0">adopt</Badge>
+                  <span
+                    className="text-graphite min-w-0 flex-1 break-words"
+                    style={{ letterSpacing: "-0.17px" }}
+                  >
                     <strong className="text-charcoal font-medium">{labelOf(event.farmerId)}</strong>{" "}
                     picked up{" "}
                     <strong className="text-charcoal font-medium">{labelOf(event.practiceId)}</strong>
@@ -78,10 +81,13 @@ export function EventLog({ result, nodes }: EventLogProps) {
 
               {event.kind === "rewarded" ? (
                 <>
-                  <Badge tone="ember">paid</Badge>
-                  <span className="text-graphite" style={{ letterSpacing: "-0.17px" }}>
+                  <Badge tone="ember" className="shrink-0">paid</Badge>
+                  <span
+                    className="text-graphite min-w-0 flex-1 break-words"
+                    style={{ letterSpacing: "-0.17px" }}
+                  >
                     {labelOf(event.expertId)} ← {event.amount.toFixed(2)} tADA{" "}
-                    <code className="text-ash text-[11px]">
+                    <code className="text-ash text-[11px] break-all">
                       ({event.txHash.slice(0, 6)}…{event.txHash.slice(-4)})
                     </code>
                   </span>
@@ -90,8 +96,11 @@ export function EventLog({ result, nodes }: EventLogProps) {
 
               {event.kind === "blocked" ? (
                 <>
-                  <Badge tone="flamingo">blocked</Badge>
-                  <span className="text-ash" style={{ letterSpacing: "-0.17px" }}>
+                  <Badge tone="flamingo" className="shrink-0">blocked</Badge>
+                  <span
+                    className="text-ash min-w-0 flex-1 break-words"
+                    style={{ letterSpacing: "-0.17px" }}
+                  >
                     {labelOf(event.fromId)} → {labelOf(event.toId)}{" "}
                     <span className="text-fog">· {event.reason}</span>
                   </span>

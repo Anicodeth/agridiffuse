@@ -64,8 +64,8 @@ export function NarrativeBox({
                 </div>
               ) : (
                 <div
-                  className="card-recessed rounded-cards px-5 py-4 text-graphite text-[15px] leading-relaxed"
-                  style={{ letterSpacing: "-0.2px" }}
+                  className="card-recessed rounded-cards px-5 py-4 text-graphite text-[15px] leading-relaxed break-words"
+                  style={{ letterSpacing: "-0.2px", overflowWrap: "anywhere" }}
                 >
                   {narrative}
                 </div>
